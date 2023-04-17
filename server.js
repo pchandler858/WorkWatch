@@ -1,22 +1,18 @@
+require("dotenv").config();
+const express = require("express");
 const inquirer = require("inquirer");
-const mysql2 = require("mysql2");
+// const mysql2 = require("mysql2");
 const Employee = require("./models/Employees");
+const connection = require("./config/connection");
 
-// set up connection to database
-const db = mysql2.createConnection({
-  host: "localhost",
-  port: 3306,
-  user: "root",
-  password: "password",
-  database: "employees_db",
-});
+const app = express();
+const PORT = process.env.PORT || 3001;
 
-// Connect to MySQL
-connection.connect((err) => {
-  if (err) throw err;
-  console.log("connected as id " + connection.threadId);
-  start();
-});
+// Express middleware
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+
 
 // Start function
 function start() {
