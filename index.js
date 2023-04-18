@@ -46,29 +46,32 @@ connection
   });
 
 // Start function
-function start() {
+const start = () => {
   inquirer
-    .prompt({
-      type: "list",
-      message: "What would you like to do?",
-      name: "start",
-      choices: [
-        "View all employees",
-        "View all employees by department",
-        "View all employees by manager",
-        "Add employee",
-        "Remove employee",
-        "Update employee role",
-        "Update employee manager",
-        "View all roles",
-        "Add role",
-        "Remove role",
-        "View all departments",
-        "Add department",
-        "Remove department",
-        "Quit",
-      ],
-    })
+    .prompt([
+      {
+        name: "menu",
+        type: "list",
+        message: "What would you like to do?",
+        name: "start",
+        choices: [
+          "View all employees",
+          "View all employees by department",
+          "View all employees by manager",
+          "Add employee",
+          "Remove employee",
+          "Update employee role",
+          "Update employee manager",
+          "View all roles",
+          "Add role",
+          "Remove role",
+          "View all departments",
+          "Add department",
+          "Remove department",
+          "Quit",
+        ],
+      },
+    ])
     .then((answer) => {
       switch (answer.start) {
         case "View all employees":
@@ -116,7 +119,7 @@ function start() {
           break;
       }
     });
-}
+};
 
 function addEmployee() {
   inquirer
