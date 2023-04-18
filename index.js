@@ -45,6 +45,7 @@ const start = () => {
         type: "list",
         message: "What would you like to do?",
         name: "start",
+        pageSize: 10,
         choices: [
           "View all departments",
           "View all roles",
@@ -88,44 +89,32 @@ const start = () => {
     });
 };
 
-// function addEmployee() {
-//   inquirer
-//     .prompt([
-//       {
-//         type: "input",
-//         message: "What is the employee's first name?",
-//         name: "firstName",
-//       },
-//       {
-//         type: "input",
-//         message: "What is the employee's last name?",
-//         name: "lastName",
-//       },
-//       {
-//         type: "input",
-//         message: "What is the employee's role ID?",
-//         name: "roleID",
-//       },
-//       {
-//         type: "input",
-//         message: "What is the employee's manager ID?",
-//         name: "managerID",
-//       },
-//     ])
-//     .then((answer) => {
-//       Employee.create({
-//         first_name: answer.firstName,
-//         last_name: answer.lastName,
-//         role_id: answer.roleID,
-//       })
-//         .then(() => {
-//           console.log("employee added");
-//         })
-//         .catch((err) => {
-//           console.log("failed to add employee", err);
-//         });
-//     })
-//     .catch((err) => {
-//       console.log("failed to prompt user for employee details", err);
-//     });
-// }
+// View all departments
+viewAllDepartments = () => {
+  const queryAll = `SELECT departments.id, departments.department_name AS department FROM departments ORDER BY departments.id`;
+  connection.query(queryAll, (err, res) => {
+    if (err) throw err;
+    console.table(res);
+    start();
+  });
+};
+
+// View all roles
+viewAllRoles = () => {
+  const queryAll = `SELECT roles.id, roles.job_title, roles.salary, departments.department_name AS department, roles.salary FROM roles INNER JOIN departments ON roles.department_id = departments.id ORDER BY roles.id`;
+  connection.query(queryAll, (err, res) => {
+    if (err) throw err;
+    console.table(res);
+    start();
+  });
+};
+
+// View all employees
+viewAllEmployees = () => {
+  const queryAll = `SELECT employees.id, employees.first_name, employees.last_name, roles.job_title AS title, departments.department_name AS department, roles.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employees LEFT JOIN roles ON employees.role_id = roles.id LEFT JOIN departments ON roles.department_id = departments.id LEFT JOIN employees manager ON manager.id = employees.manager_id ORDER BY employees.id`;
+  connection.query(queryAll, (err, res) => {
+    if (err) throw err;
+    console.table(res);
+    start();
+  });
+};

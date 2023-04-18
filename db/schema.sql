@@ -8,31 +8,25 @@ DROP TABLE IF EXISTS employees;
 
 -- create department table
 CREATE TABLE departments (
-    id INT NOT NULL AUTO_INCREMENT,
-    name VARCHAR(50) NOT NULL,
-    PRIMARY KEY (id)
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    department_name VARCHAR(50) NOT NULL
 );
 
 -- Create role table
 CREATE TABLE roles (
-    id INT NOT NULL AUTO_INCREMENT,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     job_title VARCHAR(50) NOT NULL,
     salary DECIMAL(10,2) NOT NULL,
     department_id INT NOT NULL,
-    PRIMARY KEY (id),
-    CONSTRAINT fk_department_id,
-    FOREIGN KEY (department_id) REFERENCES department(id)
+    CONSTRAINT fk_role_id FOREIGN KEY (department_id) REFERENCES departments(id)
 );
 
 -- Create employee table
 CREATE TABLE employees (
-    id INT NOT NULL AUTO_INCREMENT,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
     role_id INT NOT NULL,
     manager_id INT,
-    PRIMARY KEY (id),
-    CONSTRAINT fk_role_id,
-    FOREIGN KEY (role_id) REFERENCES role(id),
-    FOREIGN KEY (manager_id) REFERENCES employee(id)
+    CONSTRAINT fk_department FOREIGN KEY (role_id) REFERENCES roles(id) 
 );
