@@ -1,3 +1,5 @@
+DROP DATABASE IF EXISTS employee_tracker;
+
 --  create database
 CREATE DATABASE employee_tracker;
 

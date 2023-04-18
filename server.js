@@ -1,130 +1,99 @@
-require("dotenv").config();
 const express = require("express");
 const inquirer = require("inquirer");
-// const mysql2 = require("mysql2");
-const Employee = require("./models/Employees");
-const connection = require("./config/connection");
+const mysql = require("mysql2/promise");
+const cTable = require("console.table");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Express middleware
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
+const pool = mysql.createPool({
+  host: "localhost",
+  port: 3306,
+  user: process.env.DB_USER,
+  password: process.env.DB_PW,
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+});
 
-
-// Start function
-function start() {
-  inquirer
-    .prompt({
-      type: "list",
-      message: "What would you like to do?",
-      name: "start",
-      choices: [
-        "View all employees",
-        "View all employees by department",
-        "View all employees by manager",
-        "Add employee",
-        "Remove employee",
-        "Update employee role",
-        "Update employee manager",
-        "View all roles",
-        "Add role",
-        "Remove role",
-        "View all departments",
-        "Add department",
-        "Remove department",
-        "Quit",
-      ],
-    })
-    .then((answer) => {
-      switch (answer.start) {
-        case "View all employees":
-          viewAllEmployees();
-          break;
-        case "View all employees by department":
-          viewAllEmployeesByDepartment();
-          break;
-        case "View all employees by manager":
-          viewAllEmployeesByManager();
-          break;
-        case "Add employee":
-          addEmployee();
-          break;
-        case "Remove employee":
-          removeEmployee();
-          break;
-        case "Update employee role":
-          updateEmployeeRole();
-          break;
-        case "Update employee manager":
-          updateEmployeeManager();
-          break;
-        case "View all roles":
-          viewAllRoles();
-          break;
-        case "Add role":
-          addRole();
-          break;
-        case "Remove role":
-          removeRole();
-          break;
-        case "View all departments":
-          viewAllDepartments();
-          break;
-        case "Add department":
-          addDepartment();
-          break;
-        case "Remove department":
-          removeDepartment();
-          break;
-        case "Exit":
-          connection.end();
-          console.log("Bye!");
-          break;
-      }
-    });
+// function to view all departments
+async function viewAllDepartments() {
+  const [rows] = await pool.query("SELECT * FROM department");
+  console.table(rows);
 }
 
-function addEmployee() {
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        message: "What is the employee's first name?",
-        name: "firstName",
+// view all roles
+async function viewAllRoles() {
+  const [rows] = await pool.query("SELECT * FROM role");
+  console.table(rows);
+}
+
+// view all employees
+async function viewAllEmployees() {
+  const [rows] = await pool.query("SELECT * FROM employee");
+  console.table(rows);
+}
+
+// add a department
+async function addDepartment() {
+  const [rows] = await pool.query("SELECT * FROM department");
+  console.table(rows);
+  const department = await inquirer.prompt([
+    {
+      type: "input",
+      name: "name",
+      message: "What is the name of the department you would like to add?",
+    },
+  ]);
+  await pool.query("INSERT INTO department SET ?", department);
+  console.log("Added department");
+}
+
+// add a role
+async function addRole() {
+  const [rows] = await pool.query("SELECT * FROM role");
+  console.table(rows);
+  const role = await inquirer.prompt([
+    {
+      type: "input",
+      name: "title",
+      message: "What is the title of the role you would like to add?",
+      validate: (title) => {
+        if (title.trim() === "") {
+          return "Title cannot be blank";
+        }
+        return true;
       },
-      {
-        type: "input",
-        message: "What is the employee's last name?",
-        name: "lastName",
+    },
+    {
+      type: "number",
+      name: "salary",
+      message: "What is the salary of the role you would like to add?",
+      validate: (salary) => {
+        if (isNaN(salary)) {
+          return "Salary must be a number";
+        }
+        return true;
       },
-      {
-        type: "input",
-        message: "What is the employee's role ID?",
-        name: "roleID",
-      },
-      {
-        type: "input",
-        message: "What is the employee's manager ID?",
-        name: "managerID",
-      },
-    ])
-    .then((answer) => {
-      Employee.create({
-        first_name: answer.firstName,
-        last_name: answer.lastName,
-        role_id: answer.roleID,
-      })
-        .then(() => {
-          console.log("employee added");
-        })
-        .catch((err) => {
-          console.log("failed to add employee", err);
-        });
-    })
-    .catch((err) => {
-      console.log("failed to prompt user for employee details", err);
-    });
+    },
+    {
+      type: "list",
+      name: "department_id",
+      message: "Select the department of the new role",
+      choices: departments.map((department) => ({
+        name: department.name,
+        value: department.id,
+      })),
+    },
+  ]);
+  await pool.query("INSERT INTO role SET ?", role);
+  console.log(`Added ${role.title} to the database`);
 }
