@@ -1,5 +1,7 @@
 # Work Watch - Employee Tracker
 
+![](./assets/screenshot.png)
+
 This is a command-line application that allows users to manage a company's employee database, with functionalities such as viewing, adding, and updating employees, roles, and departments.
 
 ## Technologies Used
@@ -53,6 +55,5 @@ Select the option you want by using the arrow keys to navigate and press enter. 
 ## Contributing
 
 Contributions are welcome. If you would like to contribute to this project, please create a pull request.
-
 
 Link to a video demo: <>
