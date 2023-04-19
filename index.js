@@ -1,40 +1,25 @@
 const inquirer = require("inquirer");
 const cTable = require("console.table");
 const connection = require("./config/connection");
-const figlet = require("figlet");
 
-figlet.text(
-  "Work",
-  {
-    font: "Standard",
-    horizontalLayout: "default",
-    verticalLayout: "default",
-  },
-  (err, Work) => {
-    if (err) {
-      console.log("Something went wrong...");
-      console.dir(err);
-      return;
-    }
-    figlet.text(
-      "Watch",
-      {
-        font: "Standard",
-        horizontalLayout: "default",
-        verticalLayout: "default",
-      },
-      (err, Watch) => {
-        if (err) {
-          console.log("Something went wrong...");
-          console.dir(err);
-          return;
-        }
-        console.log(`${Work}\n${Watch}`);
-        start();
-      }
-    );
-  }
-);
+console.log(`
+
+██     ██  ██████  ██████  ██   ██         
+██     ██ ██    ██ ██   ██ ██  ██          
+██  █  ██ ██    ██ ██████  █████           
+██ ███ ██ ██    ██ ██   ██ ██  ██          
+ ███ ███   ██████  ██   ██ ██   ██         
+                                           
+                                           
+██     ██  █████  ████████  ██████ ██   ██ 
+██     ██ ██   ██    ██    ██      ██   ██ 
+██  █  ██ ███████    ██    ██      ███████ 
+██ ███ ██ ██   ██    ██    ██      ██   ██ 
+ ███ ███  ██   ██    ██     ██████ ██   ██ 
+                                           
+                                           
+                           
+`);
 
 // Start function
 const start = () => {
@@ -91,7 +76,7 @@ const start = () => {
 
 // View all departments
 viewAllDepartments = () => {
-  const queryAll = `SELECT departments.id, departments.department_name AS department FROM departments ORDER BY departments.id`;
+  const queryAll = `SELECT departments.id AS ID, departments.department_name AS Department FROM departments ORDER BY departments.id`;
   connection.query(queryAll, (err, res) => {
     if (err) throw err;
     console.table(res);
@@ -243,3 +228,50 @@ const addEmployee = () => {
     });
   });
 };
+
+// Update employee role
+const updateEmployeeRole = () => {
+  const queryAllEmployees = `SELECT employees.id, employees.first_name, employees.last_name, roles.job_title FROM employees LEFT JOIN roles ON employees.role_id = roles.id`;
+  const queryAllRoles = `SELECT roles.id, roles.job_title FROM roles`;
+
+  connection.query(queryAllEmployees, (err, resEmployees) => {
+    if (err) throw err;
+
+    connection.query(queryAllRoles, (err, resRoles) => {
+      if (err) throw err;
+
+      inquirer
+        .prompt([
+          {
+            name: "employee",
+            type: "list",
+            message: "Which employee's role do you want to update?",
+            choices: resEmployees.map((employee) => ({
+              name: `${employee.first_name} ${employee.last_name}`,
+              value: employee.id,
+            })),
+          },
+          {
+            name: "role",
+            type: "list",
+            message: "What is the new role of the employee?",
+            choices: resRoles.map((role) => ({
+              name: role.job_title,
+              value: role.id,
+            })),
+          },
+        ])
+        .then((answer) => {
+          const queryUpdate = `UPDATE employees SET role_id = '${answer.role}' WHERE id = '${answer.employee}'`;
+
+          connection.query(queryUpdate, (err, res) => {
+            if (err) throw err;
+            console.log("Employee role updated!");
+            viewAllEmployees();
+          });
+        });
+    });
+  });
+};
+
+start();
