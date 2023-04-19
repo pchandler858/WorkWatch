@@ -2,6 +2,7 @@
 
 ![](./assets/screenshot.png)
 
+
 This is a command-line application that allows users to manage a company's employee database, with functionalities such as viewing, adding, and updating employees, roles, and departments.
 
 ## Technologies Used
@@ -56,4 +57,5 @@ Select the option you want by using the arrow keys to navigate and press enter. 
 
 Contributions are welcome. If you would like to contribute to this project, please create a pull request.
 
-Link to a video demo: <>
+## Video Demonstration
+Link to a video demo: [demo](https://drive.google.com/file/d/1iUj3JOSYMVcAMOOpDazKCE43r9AU6_8C/view?usp=share_link)
