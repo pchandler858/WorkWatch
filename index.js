@@ -69,16 +69,16 @@ const start = () => {
         case "View all employees":
           viewAllEmployees();
           break;
-        case "Add department":
+        case "Add a department":
           addDepartment();
           break;
-        case "Add role":
+        case "Add a role":
           addRole();
           break;
-        case "Add employee":
+        case "Add an employee":
           addEmployee();
           break;
-        case "Update employee role":
+        case "Update an employee role":
           updateEmployeeRole();
           break;
         case "Exit":
@@ -117,4 +117,30 @@ viewAllEmployees = () => {
     console.table(res);
     start();
   });
+};
+
+// Add department
+addDepartment = () => {
+  inquirer
+    .prompt([
+      {
+        name: "department",
+        type: "input",
+        message: "What is the name of the department?",
+      },
+    ])
+    .then(
+      (body = (answer) => {
+        const queryAdd = `INSERT INTO departments (department_name) VALUES ('${answer.department}')`;
+        const params = [body.department];
+        connection.query(queryAdd, params, (err, res) => {
+          if (err) {
+            res.status(400).json({ error: err.message });
+            return;
+          }
+          // console.log("Department added!");
+          viewAllDepartments();
+        });
+      })
+    );
 };
