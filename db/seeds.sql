@@ -23,10 +23,10 @@ VALUES
     ('CFO', 300000, 3),
     ('CTO', 300000, 2),
     ('COO', 300000, 1),
-    ('VP of Sales', 300000, 1),
-    ('VP of Engineering', 300000, 2),
-    ('VP of Finance', 300000, 3),
-    ('VP of Legal', 300000, 4);
+    ('VP of Sales', 225000, 1),
+    ('VP of Engineering', 250000, 2),
+    ('VP of Finance', 275000, 3),
+    ('VP of Legal', 245000, 4);
 
 INSERT INTO employees (first_name, last_name, role_id, manager_id)
 VALUES
