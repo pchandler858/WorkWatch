@@ -2,7 +2,6 @@
 
 ![](./assets/screenshot.png)
 
-
 This is a command-line application that allows users to manage a company's employee database, with functionalities such as viewing, adding, and updating employees, roles, and departments.
 
 ## Technologies Used
@@ -20,18 +19,12 @@ To install the necessary dependencies, run the following command:
 
 `npm install`
 
-This command will install the following packages:
-
-- inquirer: A package that makes it easy to create a command-line interface.
-- console.table: A package that makes it easy to print data in a table format.
-
 You will also need to create a `.env` file with your MySQL credentials in the following format:
 
 ```
-DB_USER=<your MySQL username>
-DB_PASSWORD=<your MySQL password>
-DB_NAME=employee_db
-DB_HOST=localhost
+DB_NAME='employee_tracker'
+DB_USER='<your MySQL username>'
+DB_PASSWORD='<your MySQL password>'
 ```
 
 ## Usage
@@ -58,4 +51,5 @@ Select the option you want by using the arrow keys to navigate and press enter. 
 Contributions are welcome. If you would like to contribute to this project, please create a pull request.
 
 ## Video Demonstration
+
 Link to a video demo: [demo](https://drive.google.com/file/d/1iUj3JOSYMVcAMOOpDazKCE43r9AU6_8C/view?usp=share_link)
