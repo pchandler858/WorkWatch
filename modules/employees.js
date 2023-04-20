@@ -59,7 +59,7 @@ const addEmployee = (start) => {
 
           connection.query(queryAdd, (err, res) => {
             if (err) throw err;
-            console.log("Employee added!");
+            console.log("\x1b[33m%s\x1b[0m", "\nEmployee added!\n");
             viewAllEmployees(start);
           });
         });
@@ -104,7 +104,7 @@ const updateEmployeeRole = (start) => {
 
           connection.query(queryUpdate, (err, res) => {
             if (err) throw err;
-            console.log("Employee role updated!");
+            console.log("\x1b[33m%s\x1b[0m", "\nEmployee role updated!\n");
             viewAllEmployees(start);
           });
         });

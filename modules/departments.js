@@ -30,7 +30,7 @@ const addDepartment = (start) => {
             res.status(400).json({ error: err.message });
             return;
           }
-          console.log("Department added!");
+          console.log("\x1b[33m%s\x1b[0m", "\nDepartment added!\n");
           viewAllDepartments(start);
         });
       })

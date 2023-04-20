@@ -46,7 +46,7 @@ const addRole = (start) => {
               res.status(400).json({ error: err.message });
               return;
             }
-            console.log("Role added!");
+            console.log("\x1b[33m%s\x1b[0m", "\nRole added!\n");
             viewAllRoles(start);
           });
         })
